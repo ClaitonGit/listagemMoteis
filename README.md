@@ -1,16 +1,18 @@
-# guiamotel
+<h1 align="center">
+    <br>Interface app para listar moteis<br/>
+</h1>
 
-A new Flutter project.
+## :bookmark: Sobre o Projeto
 
-## Getting Started
+Dados foram consultados da API .
 
-This project is a starting point for a Flutter application.
+## :rocket: Tecnologias Utilizadas
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter]
+- [Dart]
+- [Android Studio]
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Layout mobile
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="https://github.com/user-attachments/assets/7feaa9da-9099-494b-ad70-8c1051fb4fb5" alt="drawing" width="200"/>
+<img src="https://github.com/user-attachments/assets/66c580ac-b5eb-46da-9908-6943e41da304" alt="drawing" width="200"/>
