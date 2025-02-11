@@ -127,7 +127,6 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.arrow_drop_down, color: Colors.black54),
                                     const SizedBox(width: 8),
                                     const Text(
                                       'Itens da Suíte:',
@@ -171,7 +170,7 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                                     const Padding(
                                       padding: EdgeInsets.symmetric(vertical: 8),
                                       child: Text(
-                                        'Outros Itens:',
+                                        'Tem também:',
                                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                         textAlign: TextAlign.center,
                                       ),
