@@ -21,9 +21,7 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ir agora '),
-      ),
+      appBar: AppBar(title: const Text('Ir agora')),
       body: FutureBuilder<Motel>(
         future: futureMotel,
         builder: (context, snapshot) {
@@ -40,6 +38,7 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Card do Motel
                   Card(
                     margin: const EdgeInsets.all(8),
                     elevation: 4,
@@ -89,14 +88,17 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                     ),
                   ),
 
-                   SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   const Text(
                     'Suítes:',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+
+                  // Listagem das suítes
                   ...motel.suites.map((suite) {
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
+
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -112,42 +114,93 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                             const SizedBox(height: 8),
                             ImageSlider(imagens: suite.fotos),
                             const SizedBox(height: 8),
+
+                            // Itens com Ícones
+                            // Card dos Itens da Suíte
                             Card(
-                              color: Colors.white, // Fundo branco do Card
-                              elevation: 3, // Sombra suave para destaque
+                              color: Colors.white,
+                              elevation: 3,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10), // Bordas arredondadas
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: ExpansionTile(
-                                backgroundColor: Colors.white,
-                                collapsedBackgroundColor: Colors.white,
                                 title: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    const Icon(Icons.arrow_drop_down, color: Colors.black54),
                                     const SizedBox(width: 8),
                                     const Text(
-                                      'Itens:',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
+                                      'Itens da Suíte:',
+                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                                     ),
                                   ],
                                 ),
-                                children: suite.itens.map((item) {
-                                  return Padding(
+                                children: suite.categoriaItens.isEmpty && suite.itens.isEmpty
+                                    ? [const Padding(padding: EdgeInsets.all(8), child: Text("Nenhum item disponível"))]
+                                    : [
+                                  Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      '${item['nome']}',
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(fontSize: 13, color: Colors.black87),
+                                    child: Wrap(
+                                      spacing: 16,
+                                      runSpacing: 8,
+                                      alignment: WrapAlignment.center,
+                                      children: suite.categoriaItens.map((categoria) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Image.network(
+                                              categoria.icone,
+                                              width: 40,
+                                              height: 40,
+                                              errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, size: 40),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              categoria.nome,
+                                              style: const TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
                                     ),
-                                  );
-                                }).toList(),
+                                  ),
+
+                                  // Outros Itens
+                                  if (suite.itens.isNotEmpty) ...[
+                                    const Divider(),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                      child: Text(
+                                        'Outros Itens:',
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                      child: Wrap(
+                                        spacing: 8,
+                                        runSpacing: 4,
+                                        alignment: WrapAlignment.center,
+                                        children: suite.itens.map((item) {
+                                          return Chip(
+                                            label: Text(
+                                              item.nome,
+                                              style: const TextStyle(fontSize: 10),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
 
+
                             const SizedBox(height: 8),
+
+                            // Períodos
                             const Text(
                               'Períodos:',
                               style: TextStyle(
@@ -157,6 +210,7 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                               ),
                             ),
                             const SizedBox(height: 8),
+
                             ...suite.periodos.map((periodo) {
                               return Card(
                                 color: Colors.white,
@@ -166,15 +220,12 @@ class _ListagemmoteisState extends State<Listagemmoteis> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      Icon(
-                                        Icons.access_time,
-                                        color: Colors.black26,
-                                      ),
+                                      const Icon(Icons.access_time, color: Colors.black26),
                                       const SizedBox(width: 10),
                                       Expanded(
                                         child: Text(
                                           ' ${periodo['tempoFormatado']}: R\$ ${periodo['valorTotal']}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -210,23 +261,45 @@ class ImageSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: PageView.builder(
-        itemCount: imagens.length,
-        itemBuilder: (context, index) {
-          print("Carregando imagem: ${imagens[index]}");
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                imagens[index],
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.error, size: 100),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          PageView.builder(
+            itemCount: imagens.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    imagens[index],
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error, size: 100),
+                  ),
+                ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 8,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                imagens.length,
+                    (index) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
